@@ -1,6 +1,6 @@
 package com.example.TaskManagement.model.enums;
 
-public enum Role {
+public enum RoleType {
 
     USER, ADMIN
 }

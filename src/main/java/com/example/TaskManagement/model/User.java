@@ -1,10 +1,12 @@
 package com.example.TaskManagement.model;
 
 
-import com.example.TaskManagement.model.enums.Role;
+import com.example.TaskManagement.model.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -23,6 +25,6 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
+    @JoinColumn(name = "role")
+    private List<Role> roles;
 }
