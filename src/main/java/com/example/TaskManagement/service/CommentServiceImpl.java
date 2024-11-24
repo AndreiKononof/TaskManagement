@@ -2,6 +2,7 @@ package com.example.TaskManagement.service;
 
 import com.example.TaskManagement.exception.NotFoundException;
 import com.example.TaskManagement.model.Comment;
+import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.User;
 import com.example.TaskManagement.repository.CommentRepository;
 import com.example.TaskManagement.service.interfaces.CommentService;
@@ -36,7 +37,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> findALLByAuthor(User author) {
+    public List<Comment> findAllByTask(Task task) {
+        List<Comment> comments = commentRepository.findAllByTask(task);
+        log.info("Completed method findAll comment by task ID - {0}, name - {1}",task.getId(), task.getTitle());
+        return List.of();
+    }
+
+    @Override
+    public List<Comment> findAllByAuthor(User author) {
         List<Comment> comments = commentRepository.findAllByAuthor(author);
         log.info("Completed method findAll comment by author name - {}, ID -{}",
                 author.getName(), author.getId());

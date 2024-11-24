@@ -1,5 +1,6 @@
 package com.example.TaskManagement.service;
 
+import com.example.TaskManagement.exception.CreateUserException;
 import com.example.TaskManagement.exception.NotFoundException;
 import com.example.TaskManagement.model.User;
 import com.example.TaskManagement.repository.UserRepository;
@@ -18,6 +19,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+
+    @Override
+    public User findByName(String name) {
+        User user = userRepository.findByName(name);
+        if(user == null){
+            throw new NotFoundException(MessageFormat.format( "Пользователь с именем {} не найден", name));
+        }
+        log.info("Completed method findByName user name - {}", name );
+        return user;
+    }
+
     @Override
     public User findById(Long id) {
         User user = userRepository.findById(id)
@@ -35,7 +47,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
+    public User save(User newUser) {
+        User user = userRepository.findByName(newUser.getName());
+        if(user != null){
+            throw  new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {}", newUser.getName()));
+        }
         User userSave = userRepository.save(user);
         log.info("Save user ID - {}", userSave.getId());
         return userSave;

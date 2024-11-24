@@ -1,7 +1,6 @@
 package com.example.TaskManagement.model;
 
 
-import com.example.TaskManagement.model.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
