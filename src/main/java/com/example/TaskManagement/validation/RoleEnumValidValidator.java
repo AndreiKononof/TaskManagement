@@ -8,7 +8,7 @@ import jakarta.validation.ConstraintValidatorContext;
 public class RoleEnumValidValidator implements ConstraintValidator<RoleEnumValid, Role> {
     @Override
     public boolean isValid(Role role, ConstraintValidatorContext constraintValidatorContext) {
-        if(role.getRole().toString().equals(RoleType.ADMIN) || role.getRole().toString().equals(RoleType.USER)) return true;
+        if(role.getRole().equals(RoleType.ADMIN) || role.getRole().equals(RoleType.USER)) return true;
         return false;
     }
 }

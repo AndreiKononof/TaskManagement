@@ -24,7 +24,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment findById(Long id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(()
-                        -> new NotFoundException(MessageFormat.format("Комментарий с ID {} не найден", id)));
+                        -> new NotFoundException(MessageFormat.format("Комментарий с ID {0} не найден", id)));
     log.info("Completed method findById comment ID {}",id);
         return comment;
     }
@@ -39,8 +39,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> findAllByTask(Task task) {
         List<Comment> comments = commentRepository.findAllByTask(task);
-        log.info("Completed method findAll comment by task ID - {0}, name - {1}",task.getId(), task.getTitle());
-        return List.of();
+        log.info("Completed method findAll comment by task ID - {}, name - {}",task.getId(), task.getTitle());
+        return comments;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.findAllByAuthor(author);
         log.info("Completed method findAll comment by author name - {}, ID -{}",
                 author.getName(), author.getId());
-        return List.of();
+        return comments;
     }
 
     @Override

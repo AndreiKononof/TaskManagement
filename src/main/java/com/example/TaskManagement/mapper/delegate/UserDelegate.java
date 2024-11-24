@@ -12,9 +12,9 @@ public abstract class UserDelegate implements UserMapper {
         UserResponse response = new UserResponse();
 
         response.setName(user.getName());
-        String role = "";
-        user.getRoles().forEach(el -> role.concat(el.toString()+"; "));
-        response.setRole(role);
+        StringBuilder role = new StringBuilder();
+        user.getRoles().forEach(el -> role.append(el.toString()).append("; "));
+        response.setRole(role.toString());
 
         return response;
     }

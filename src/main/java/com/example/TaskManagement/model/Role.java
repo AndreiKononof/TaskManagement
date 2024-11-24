@@ -1,6 +1,7 @@
 package com.example.TaskManagement.model;
 
 
+import com.example.TaskManagement.model.enums.RoleType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -14,5 +15,5 @@ public class Role {
 
     private Long id;
 
-    private Role role;
+    private RoleType role;
 }

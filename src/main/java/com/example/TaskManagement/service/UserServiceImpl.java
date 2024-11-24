@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     public User findByName(String name) {
         User user = userRepository.findByName(name);
         if(user == null){
-            throw new NotFoundException(MessageFormat.format( "Пользователь с именем {} не найден", name));
+            throw new NotFoundException(MessageFormat.format( "Пользователь с именем {0} не найден", name));
         }
         log.info("Completed method findByName user name - {}", name );
         return user;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public User findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(()
-                        -> new NotFoundException(MessageFormat.format("Пользователь с ID - {} не найден", id)));
+                        -> new NotFoundException(MessageFormat.format("Пользователь с ID - {0} не найден", id)));
         log.info("Completed method findById user ID - {}",id);
         return user;
     }
@@ -50,9 +50,9 @@ public class UserServiceImpl implements UserService {
     public User save(User newUser) {
         User user = userRepository.findByName(newUser.getName());
         if(user != null){
-            throw  new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {}", newUser.getName()));
+            throw  new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {0}", newUser.getName()));
         }
-        User userSave = userRepository.save(user);
+        User userSave = userRepository.save(newUser);
         log.info("Save user ID - {}", userSave.getId());
         return userSave;
     }
