@@ -1,7 +1,7 @@
 package com.example.TaskManagement.model;
 
-import com.example.TaskManagement.model.enums.Priority;
-import com.example.TaskManagement.model.enums.StatusTask;
+import com.example.TaskManagement.model.enums.PriorityType;
+import com.example.TaskManagement.model.enums.StatusTaskType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -27,12 +27,12 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @OneToOne
+    @JoinColumn(name = "status_id")
     private StatusTask statusTask;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "priority")
+    @OneToOne
+    @JoinColumn(name = "priority_id")
     private Priority priority;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")

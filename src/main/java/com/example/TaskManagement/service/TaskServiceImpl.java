@@ -23,7 +23,7 @@ public class TaskServiceImpl implements TaskService {
     public Task findById(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() ->
-                        new NotFoundException(MessageFormat.format("Задача с ID - {} не найден", id)));
+                        new NotFoundException(MessageFormat.format("Задача с ID - {0} не найден", id)));
         log.info("Completed method findById task ID - {}", id);
         return task;
     }

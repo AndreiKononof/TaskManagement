@@ -2,6 +2,7 @@ package com.example.TaskManagement.dto.request;
 
 
 import com.example.TaskManagement.validation.RoleEnumValid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -13,6 +14,9 @@ public class UserRequest {
 
     @NotBlank(message = "Пароль не заполнен!")
     private String password;
+
+    @Email
+    private String email;
 
     @NotBlank(message = "Роль пользователя не задана!")
     @RoleEnumValid

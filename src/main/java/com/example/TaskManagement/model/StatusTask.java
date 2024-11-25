@@ -1,26 +1,22 @@
 package com.example.TaskManagement.model;
 
-
-import com.example.TaskManagement.model.enums.RoleType;
+import com.example.TaskManagement.model.enums.StatusTaskType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
-@Entity
-@Table(name = "role")
 @Data
+@Entity
+@Table(name = "status")
 @ToString
-public class Role {
+public class StatusTask {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_user")
-    private RoleType role;
+    @Column(name = "status_task")
+    private StatusTaskType status;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
 }

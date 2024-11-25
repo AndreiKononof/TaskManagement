@@ -23,7 +23,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @JoinColumn(name = "role")
+    @Column(name = "email")
+    private String email;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Role> roles;
 }

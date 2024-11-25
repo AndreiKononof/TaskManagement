@@ -1,6 +1,6 @@
 package com.example.TaskManagement.model.enums;
 
-public enum Priority {
+public enum PriorityType {
 
     HIGH, MEDIUM , LOW
 }

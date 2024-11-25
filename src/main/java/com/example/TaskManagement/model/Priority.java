@@ -1,26 +1,23 @@
 package com.example.TaskManagement.model;
 
 
-import com.example.TaskManagement.model.enums.RoleType;
+import com.example.TaskManagement.model.enums.PriorityType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
-@Entity
-@Table(name = "role")
 @Data
+@Entity
 @ToString
-public class Role {
+@Table(name = "priority")
+public class Priority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_user")
-    private RoleType role;
+    @Column(name = "priority_task")
+    private PriorityType priority;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
-    private User user;
 }

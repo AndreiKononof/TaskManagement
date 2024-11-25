@@ -1,6 +1,6 @@
 package com.example.TaskManagement.dto.request;
 
-import com.example.TaskManagement.model.enums.Priority;
+import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.validation.PriorityEnumValid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class TaskRequest {
 
     @NotBlank(message = "Задаче не задан приоритет!")
     @PriorityEnumValid
-    private Priority priority;
+    private PriorityType priority;
 
     @NotBlank(message = "Автор задачи не заполнен!")
     private String nameAuthor;

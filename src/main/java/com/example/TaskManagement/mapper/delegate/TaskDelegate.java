@@ -6,7 +6,7 @@ import com.example.TaskManagement.dto.response.TaskToListResponse;
 import com.example.TaskManagement.mapper.CommentMapper;
 import com.example.TaskManagement.mapper.TaskMapper;
 import com.example.TaskManagement.model.Task;
-import com.example.TaskManagement.model.enums.StatusTask;
+import com.example.TaskManagement.model.enums.StatusTaskType;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.TaskService;
 import com.example.TaskManagement.service.interfaces.UserService;
@@ -31,7 +31,7 @@ public abstract class TaskDelegate implements TaskMapper {
         Task task = new Task();
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
-        task.setStatusTask(StatusTask.WAITING);
+        task.setStatusTask(StatusTaskType.WAITING);
         task.setPriority(request.getPriority());
         task.setAuthor(userService.findByName(request.getNameAuthor()));
         task.setExecutor(userService.findByName(request.getNameExecutor()));

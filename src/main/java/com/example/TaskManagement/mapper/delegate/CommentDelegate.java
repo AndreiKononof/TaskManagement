@@ -5,7 +5,9 @@ import com.example.TaskManagement.dto.response.CommentResponse;
 import com.example.TaskManagement.exception.UserNotAllowedCorrectException;
 import com.example.TaskManagement.mapper.CommentMapper;
 import com.example.TaskManagement.model.Comment;
+import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.service.interfaces.CommentService;
+import com.example.TaskManagement.service.interfaces.TaskService;
 import com.example.TaskManagement.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +20,12 @@ public abstract class CommentDelegate implements CommentMapper {
 
     private final CommentService commentService;
 
+    private final TaskService taskService;
+
     @Override
     public Comment commentRequestToComment(CommentRequest request) {
         Comment comment = new Comment();
+        comment.setTask(taskService.findById(request.getTaskId()));
         comment.setAuthor(userService.findByName(request.getUser()));
         comment.setText(request.getText());
         return comment;
