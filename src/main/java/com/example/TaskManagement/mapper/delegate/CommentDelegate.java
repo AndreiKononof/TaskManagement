@@ -5,22 +5,26 @@ import com.example.TaskManagement.dto.response.CommentResponse;
 import com.example.TaskManagement.exception.UserNotAllowedCorrectException;
 import com.example.TaskManagement.mapper.CommentMapper;
 import com.example.TaskManagement.model.Comment;
-import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.TaskService;
 import com.example.TaskManagement.service.interfaces.UserService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@RequiredArgsConstructor
+
 public abstract class CommentDelegate implements CommentMapper {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final CommentService commentService;
+    @Autowired
+    private CommentService commentService;
 
-    private final TaskService taskService;
+    @Autowired
+    private TaskService taskService;
 
     @Override
     public Comment commentRequestToComment(CommentRequest request) {
@@ -45,12 +49,22 @@ public abstract class CommentDelegate implements CommentMapper {
     public CommentResponse commentToCommentResponse(Comment comment) {
         CommentResponse response = new CommentResponse();
         response.setText(comment.getText());
-        response.setAuthor(userService.findById(comment.getAuthor().getId()).getName());
+        response.setAuthor(comment.getAuthor().getName());
         LocalDateTime lastUpdate = comment.getUpdateTime();
         if(lastUpdate == null){
            lastUpdate = comment.getCreateTime();
         }
         response.setLastUpdate(lastUpdate);
         return response;
+    }
+
+    @Override
+    public List<CommentResponse> commentListToListResponse(List<Comment> comments) {
+        List<CommentResponse> responses = new ArrayList<>();
+        for (Comment comment : comments){
+            CommentResponse commentResponse = commentToCommentResponse(comment);
+            responses.add(commentResponse);
+        }
+        return responses;
     }
 }

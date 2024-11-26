@@ -3,12 +3,13 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgres://localhost:5432/task_db
+    url: jdbc:postgresql://localhost:5432/task_db
     username: postgres
     password: postgres
     hikari:
       schema: task_schema
+
   liquibase:
-    change-log: classpath:db/change-log/db.changelog-master.xml
+    change-log: classpath:db.change-log/db.changelog-master.xml
     enabled: true
-    drop-first: true
+    drop-first: false

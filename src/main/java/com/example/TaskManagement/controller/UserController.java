@@ -1,6 +1,7 @@
 package com.example.TaskManagement.controller;
 
 import com.example.TaskManagement.dto.request.CommentRequest;
+import com.example.TaskManagement.dto.request.StatusUpdateRequest;
 import com.example.TaskManagement.dto.response.CommentResponse;
 import com.example.TaskManagement.dto.response.TaskResponse;
 import com.example.TaskManagement.dto.response.list.TaskListResponse;
@@ -8,6 +9,7 @@ import com.example.TaskManagement.mapper.CommentMapper;
 import com.example.TaskManagement.mapper.TaskMapper;
 import com.example.TaskManagement.model.Comment;
 import com.example.TaskManagement.model.Task;
+import com.example.TaskManagement.model.enums.StatusTaskType;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.TaskService;
 import jakarta.validation.Valid;
@@ -35,24 +37,33 @@ public class UserController {
     private final CommentService commentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getTask(Long id,String name){
-        Task task = taskService.findById(id);
+    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id,String name){
+        log.info("Calling request get task ID - {}", id);
+        Task task = taskService.findByUser(id,name);
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskToTaskResponse(task));
     }
 
     @GetMapping("/all")
     public ResponseEntity<TaskListResponse> getAllTask(String name){
-        List<Task> tasks = taskService.findAll();
+        log.info("Calling request get all task");
+        List<Task> tasks = taskService.findAllByUser(name);
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskListToTaskListResponse(tasks));
     }
 
     @PutMapping("/create/comment/{id}")
-    public ResponseEntity<CommentResponse> createComment(@PathVariable Long id, @Valid CommentRequest request){
+    public ResponseEntity<CommentResponse> createComment(@PathVariable Long id,@RequestBody @Valid CommentRequest request){
+        log.info("Calling request create comment {}",request);
         Comment comment = commentService.save(commentMapper.commentRequestToComment(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(commentMapper.commentToCommentResponse(comment));
     }
 
+    @PostMapping("/update_status/{taskId}")
+    public ResponseEntity<TaskResponse> updateStatusTask(@PathVariable Long taskId, @RequestBody @Valid StatusUpdateRequest status){
+        log.info("Calling request update status task new status - {}", status.getStatusTaskType());
+        Task task = taskService.updateStatus(taskId, StatusTaskType.valueOf(status.getStatusTaskType()));
+        return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskToTaskResponse(task));
 
+    }
 
 
 

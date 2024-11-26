@@ -8,6 +8,7 @@ import com.example.TaskManagement.mapper.delegate.UserDelegate;
 import com.example.TaskManagement.model.User;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface UserMapper {
 
     User userRequestToUser (UserRequest request);
 
+    @Mapping(source = "id", target = "id")
     User userRequestToUser (Long id, UserRequest request);
 
     UserResponse userToUserResponse (User user);

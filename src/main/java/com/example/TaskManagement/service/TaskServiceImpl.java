@@ -2,14 +2,25 @@ package com.example.TaskManagement.service;
 
 
 import com.example.TaskManagement.exception.NotFoundException;
+import com.example.TaskManagement.exception.ValidTaskException;
+import com.example.TaskManagement.model.Priority;
+import com.example.TaskManagement.model.StatusTask;
 import com.example.TaskManagement.model.Task;
+import com.example.TaskManagement.model.User;
+import com.example.TaskManagement.model.enums.PriorityType;
+import com.example.TaskManagement.model.enums.StatusTaskType;
 import com.example.TaskManagement.repository.TaskRepository;
+import com.example.TaskManagement.service.interfaces.PriorityService;
+import com.example.TaskManagement.service.interfaces.StatusTaskService;
 import com.example.TaskManagement.service.interfaces.TaskService;
+import com.example.TaskManagement.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,6 +29,10 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
+
+    private final StatusTaskService statusTaskService;
+
+    private final PriorityService priorityService;
 
     @Override
     public Task findById(Long id) {
@@ -29,6 +44,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task findByUser(Long id, String name) {
+        Task task = findById(id);
+
+        if(task.getExecutors().stream().map(User::getName).toList().contains(name)){
+            log.info("Completed method find task user {}",name);
+            return task;
+        }
+
+        throw new ValidTaskException("Вы не являетесь испольнителем задачи, ее просмотр не доступен!");
+    }
+
+    @Override
     public List<Task> findAll() {
         List<Task> tasks = taskRepository.findAll();
         log.info("Completed method findAll task");
@@ -36,7 +63,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> findAllByUser(String name) {
+        List<Task> tasksAll = taskRepository.findAll();
+        List<Task> tasks = new ArrayList<>();
+        for(Task task : tasksAll){
+            if(task.getExecutors().stream().map(User::getName).toList().contains(name)){
+                tasks.add(task);
+            }
+        }
+        log.info("Completed method find task for user {}",name);
+        return tasks;
+    }
+
+    @Override
     public List<Task> findAllBy() {
+
+
         return List.of();
     }
 
@@ -52,6 +94,38 @@ public class TaskServiceImpl implements TaskService {
         Task taskUpdate = taskRepository.save(task);
         log.info("Update task ID - {}",task.getId());
         return taskUpdate;
+    }
+
+    @Override
+    @Transactional
+    public Task updateStatus(Long id, StatusTaskType statusTaskType) {
+        Task task = findById(id);
+        StatusTask statusTask = statusTaskService.findByStatus(statusTaskType);
+        if(statusTask == null){
+            statusTask =new StatusTask();
+            statusTask.setStatus(statusTaskType);
+            statusTaskService.save(statusTask);
+        }
+        task.setStatusTask(statusTask);
+        save(task);
+        log.info("Completed method update status task new status - {}", statusTaskType);
+        return task;
+    }
+
+    @Override
+    @Transactional
+    public Task updatePriority(Long id, PriorityType priorityType) {
+        Task task = findById(id);
+        Priority priority = priorityService.findByPriority(priorityType);
+        if(priority == null){
+            priority = new Priority();
+            priority.setPriorityType(priorityType);
+            priorityService.save(priority);
+        }
+        task.setPriority(priority);
+        save(task);
+        log.info("Completed method update status task new status - {}", priorityType);
+        return task;
     }
 
     @Override

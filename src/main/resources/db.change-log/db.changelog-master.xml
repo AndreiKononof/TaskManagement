@@ -6,7 +6,7 @@
     <changeSet id="1" author="KononovAndrei">
 
         <createTable tableName="priority">
-            <column name="id" type="SERIAL" autoIncrement="true">
+            <column name="id" type="serial4" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="priority_task" type="VARCHAR(50)">
@@ -15,19 +15,16 @@
         </createTable>
 
         <createTable tableName="role">
-            <column name="id" type="SERIAL" autoIncrement="true">
+            <column name="id" type="serial4" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="role_user" type="VARCHAR(50)">
                 <constraints nullable="true"/>
             </column>
-            <column name="user_id" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
 
         <createTable tableName="status">
-            <column name="id" type="SERIAL" autoIncrement="true">
+            <column name="id" type="serial4" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="status_task" type="VARCHAR(50)">
@@ -36,7 +33,7 @@
         </createTable>
 
         <createTable tableName="comment">
-            <column name="id" type="BIG SERIAL" autoIncrement="true">
+            <column name="id" type="serial4" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="text" type="TEXT"/>
@@ -50,8 +47,8 @@
             <column name="update_time" type="TIMESTAMP"/>
         </createTable>
 
-        <createTable tableName="user">
-            <column name="id" type="BIG SERIAL" autoIncrement="true">
+        <createTable tableName="users">
+            <column name="id" type="serial4" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -63,12 +60,22 @@
             <column name="email" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="role_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
             <column name="create_time" type="TIMESTAMP"/>
             <column name="update_time" type="TIMESTAMP"/>
         </createTable>
 
+        <createTable tableName="task_executors">
+            <column name="task_id" type="INTEGER" >
+                <constraints nullable="false" />
+            </column>
+            <column name="executor_id" type="INTEGER"/>
+        </createTable>
+
         <createTable tableName="task">
-            <column name="id" type="BIG SERIAL" autoIncrement="true">
+            <column name="id" type="serial4" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="TEXT">
@@ -86,23 +93,14 @@
             <column name="author_id" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
-            <column name="executor_id" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
             <column name="create_time" type="TIMESTAMP"/>
             <column name="update_time" type="TIMESTAMP"/>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="role"
-                                 baseColumnNames="user_id"
-                                 constraintName="role_user"
-                                 referencedTableName="user"
-                                 referencedColumnNames="id"/>
-        
         <addForeignKeyConstraint baseTableName="comment"
                                  baseColumnNames="author_id"
                                  constraintName="comment_user_author"
-                                 referencedTableName="user"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="comment"
@@ -126,14 +124,15 @@
         <addForeignKeyConstraint baseTableName="task"
                                  baseColumnNames="author_id"
                                  constraintName="task_author"
-                                 referencedTableName="user"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableName="task"
-                                 baseColumnNames="executor_id"
-                                 constraintName="task_executor"
-                                 referencedTableName="user"
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="role_id"
+                                 constraintName="users_role"
+                                 referencedTableName="role"
                                  referencedColumnNames="id"/>
+
 
     </changeSet>
 

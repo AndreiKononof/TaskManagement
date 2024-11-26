@@ -1,9 +1,12 @@
 package com.example.TaskManagement.dto.request;
 
 import com.example.TaskManagement.model.enums.PriorityType;
-import com.example.TaskManagement.validation.PriorityEnumValid;
+import com.example.TaskManagement.validation.EnumNamePattern;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class TaskRequest {
@@ -14,17 +17,14 @@ public class TaskRequest {
     @NotBlank(message = "Задача не описана!")
     private String description;
 
-    @NotBlank(message = "Задаче не задан приоритет!")
-    @PriorityEnumValid
-    private PriorityType priority;
+    @NotNull(message = "Приоритет должен быть заполнен")
+    @EnumNamePattern(enumClass = PriorityType.class, enums = "LOW|MEDIUM|HIGH")
+    private String priorityType;
 
     @NotBlank(message = "Автор задачи не заполнен!")
     private String nameAuthor;
 
-    @NotBlank(message = "не назначен исполнитель!")
-    private String nameExecutor;
-
-
-
+    @NotNull(message = "Не назначен исполнитель!")
+    private List<String> nameExecutor;
 
 }

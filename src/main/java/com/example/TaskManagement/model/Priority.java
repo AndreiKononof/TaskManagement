@@ -3,13 +3,17 @@ package com.example.TaskManagement.model;
 
 import com.example.TaskManagement.model.enums.PriorityType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @Entity
 @ToString
-@Table(name = "priority")
+@Table(name = "priority", schema = "task_schema")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Priority {
 
     @Id
@@ -18,6 +22,6 @@ public class Priority {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priority_task")
-    private PriorityType priority;
+    private PriorityType priorityType;
 
 }

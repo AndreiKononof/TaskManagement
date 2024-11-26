@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +23,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByName(String name) {
-        User user = userRepository.findByName(name);
-        if(user == null){
-            throw new NotFoundException(MessageFormat.format( "Пользователь с именем {0} не найден", name));
+        log.info("Calling method findByName user {}",name);
+        Optional<User> user = userRepository.findByName(name);
+        if(user.isPresent()){
+            log.info("Completed method findByName user name - {}", name );
+            return user.get();
         }
-        log.info("Completed method findByName user name - {}", name );
-        return user;
+        throw new NotFoundException(MessageFormat.format("Пользователь {0} не найден", name));
     }
 
     @Override
@@ -48,8 +50,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User newUser) {
-        User user = userRepository.findByName(newUser.getName());
-        if(user != null){
+        Optional<User> user = userRepository.findByName(newUser.getName());
+        if(user.isPresent()){
             throw  new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {0}", newUser.getName()));
         }
         User userSave = userRepository.save(newUser);

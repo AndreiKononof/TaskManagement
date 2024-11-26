@@ -1,6 +1,10 @@
 package com.example.TaskManagement.dto.response;
 
+import com.example.TaskManagement.model.enums.PriorityType;
+import com.example.TaskManagement.model.enums.StatusTaskType;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class TaskToListResponse {
@@ -11,13 +15,13 @@ public class TaskToListResponse {
 
     private String description;
 
-    private String status;
+    private StatusTaskType status;
 
-    private String priority;
+    private PriorityType priorityType;
 
     private Integer commentCount;
 
     private String nameAuthor;
 
-    private String nameExecutor;
+    private List<String> nameExecutor;
 }
