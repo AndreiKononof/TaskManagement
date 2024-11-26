@@ -62,7 +62,6 @@ public class StatusTaskServiceTest {
     public void testSaveRole() {
         when(repository.save(statusTasks.get(0))).thenReturn(statusTasks.get(0));
         StatusTask statusTask = service.save(statusTasks.get(0));
-
         assertEquals(statusTasks.get(0).getId(), statusTask.getId());
         verify(repository, times(1)).save(statusTasks.get(0));
     }
