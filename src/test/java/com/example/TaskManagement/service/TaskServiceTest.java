@@ -41,19 +41,19 @@ public class TaskServiceTest {
                 .id(1L).name("SomeName").password("12345")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .email("Some@some.some").roles(new Role(1l, RoleType.ADMIN))
+                .email("Some@some.some").roles(new Role(1L, RoleType.ADMIN))
                 .tasks(null).build();
         User userTwo = User.builder()
                 .id(2L).name("SomeName2").password("12345")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .email("Some2@some.some").roles(new Role(1l, RoleType.USER))
+                .email("Some2@some.some").roles(new Role(2L, RoleType.USER))
                 .tasks(null).build();
         User userThree = User.builder()
                 .id(3L).name("SomeName3").password("12345")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .email("Some3@some.some").roles(new Role(1l, RoleType.USER))
+                .email("Some3@some.some").roles(new Role(2L, RoleType.USER))
                 .tasks(null).build();
 
         List<User> users = new ArrayList<>();

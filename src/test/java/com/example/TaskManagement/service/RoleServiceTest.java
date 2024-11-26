@@ -1,14 +1,11 @@
 package com.example.TaskManagement.service;
 
-import com.example.TaskManagement.exception.NotFoundException;
 import com.example.TaskManagement.model.Role;
 import com.example.TaskManagement.model.enums.RoleType;
 import com.example.TaskManagement.repository.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
@@ -16,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Тест сервиса Ролей")

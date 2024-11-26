@@ -13,7 +13,6 @@ import com.example.TaskManagement.repository.TaskRepository;
 import com.example.TaskManagement.service.interfaces.PriorityService;
 import com.example.TaskManagement.service.interfaces.StatusTaskService;
 import com.example.TaskManagement.service.interfaces.TaskService;
-import com.example.TaskManagement.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

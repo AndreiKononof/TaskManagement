@@ -11,19 +11,15 @@ import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.User;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
-import com.example.TaskManagement.repository.PriorityRepository;
 import com.example.TaskManagement.service.StatusTaskServiceImpl;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.PriorityService;
 import com.example.TaskManagement.service.interfaces.TaskService;
 import com.example.TaskManagement.service.interfaces.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 public abstract class TaskDelegate implements TaskMapper {

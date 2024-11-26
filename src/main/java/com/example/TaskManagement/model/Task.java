@@ -1,7 +1,5 @@
 package com.example.TaskManagement.model;
 
-import com.example.TaskManagement.model.enums.PriorityType;
-import com.example.TaskManagement.model.enums.StatusTaskType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,7 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
+
 
 @Data
 @ToString

@@ -1,9 +1,6 @@
 package com.example.TaskManagement.service;
 
-import com.example.TaskManagement.exception.NotFoundException;
-import com.example.TaskManagement.model.Role;
 import com.example.TaskManagement.model.StatusTask;
-import com.example.TaskManagement.model.enums.RoleType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
 import com.example.TaskManagement.repository.StatusTaskRepository;
 import org.junit.jupiter.api.BeforeEach;

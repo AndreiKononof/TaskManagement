@@ -1,6 +1,5 @@
 package com.example.TaskManagement.service.interfaces;
 
-import com.example.TaskManagement.model.Priority;
 import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
