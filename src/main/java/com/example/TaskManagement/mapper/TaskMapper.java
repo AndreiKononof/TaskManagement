@@ -7,9 +7,9 @@ import com.example.TaskManagement.dto.response.TaskToListResponse;
 import com.example.TaskManagement.dto.response.list.TaskListResponse;
 import com.example.TaskManagement.mapper.delegate.TaskDelegate;
 import com.example.TaskManagement.model.Task;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -21,10 +21,12 @@ import java.util.List;
 public interface TaskMapper {
 
     Task taskRequestToTask(TaskRequest request);
-    @Mapping(source = "id", target = "id")
+
     Task taskRequestToTask(Long id, TaskRequest request);
 
     TaskResponse taskToTaskResponse(Task task);
+
+    TaskResponse taskToTaskResponse(Task task, PageInfo pageInfo);
 
     TaskToListResponse taskToListResponse(Task task);
 

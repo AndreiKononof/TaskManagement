@@ -11,6 +11,7 @@ import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.User;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.service.StatusTaskServiceImpl;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.PriorityService;
@@ -98,15 +99,37 @@ public abstract class TaskDelegate implements TaskMapper {
 
         taskResponse.setComments(commentMapper
                 .commentListToCommentListResponse(
-                        commentService.findAllByTask(task)
+                        commentService.findAllByTask(task, new PageInfo())
                 ));
 
         return taskResponse;
     }
 
     @Override
-    public List<TaskToListResponse> taskListToListResponse(List<Task> tasks) {
+    public TaskResponse taskToTaskResponse(Task task, PageInfo pageInfo) {
+        if(pageInfo == null){
+            return taskToTaskResponse(task);
+        }
+        TaskResponse taskResponse = new TaskResponse();
+        taskResponse.setId(task.getId());
+        taskResponse.setTitle(task.getTitle());
+        taskResponse.setDescription(task.getDescription());
+        taskResponse.setStatus(task.getStatusTask().getStatus());
+        taskResponse.setPriorityType(task.getPriority().getPriorityType());
+        taskResponse.setNameAuthor(task.getAuthor().getName());
+        taskResponse.setNameExecutor(task.getExecutors()
+                .stream()
+                .map(User::getName)
+                .toList());
+        taskResponse.setComments(commentMapper
+                .commentListToCommentListResponse(
+                        commentService.findAllByTask(task, pageInfo)
+                ));
+        return taskResponse;
+    }
 
+    @Override
+    public List<TaskToListResponse> taskListToListResponse(List<Task> tasks) {
         List<TaskToListResponse> responses = new ArrayList<>();
 
         for (Task task : tasks) {

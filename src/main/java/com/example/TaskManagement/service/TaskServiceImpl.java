@@ -9,12 +9,14 @@ import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.User;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.repository.TaskRepository;
 import com.example.TaskManagement.service.interfaces.PriorityService;
 import com.example.TaskManagement.service.interfaces.StatusTaskService;
 import com.example.TaskManagement.service.interfaces.TaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
+
     @Override
     public Task findByUser(Long id, String name) {
         Task task = findById(id);
@@ -55,15 +58,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAll() {
-        List<Task> tasks = taskRepository.findAll();
+    public List<Task> findAll(PageInfo pageInfo) {
+        if(pageInfo == null){
+            pageInfo = new PageInfo();
+        }
+        List<Task> tasks = taskRepository.findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
         log.info("Completed method findAll task");
         return tasks;
     }
 
     @Override
-    public List<Task> findAllByUser(String name) {
-        List<Task> tasksAll = taskRepository.findAll();
+    public List<Task> findAllByUser(String name, PageInfo pageInfo) {
+        if(pageInfo == null){
+            pageInfo = new PageInfo();
+        }
+        List<Task> tasksAll = taskRepository.findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
         List<Task> tasks = new ArrayList<>();
         for(Task task : tasksAll){
             if(task.getExecutors().stream().map(User::getName).toList().contains(name)){

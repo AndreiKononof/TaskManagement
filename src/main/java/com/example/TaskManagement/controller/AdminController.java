@@ -14,6 +14,7 @@ import com.example.TaskManagement.model.Comment;
 import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.TaskService;
 import jakarta.validation.Valid;
@@ -37,17 +38,17 @@ public class AdminController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id) {
+    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id,PageInfo pageInfo) {
         log.info("Calling request get task admin task ID {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(
-                taskMapper.taskToTaskResponse(taskService.findById(id)));
+                taskMapper.taskToTaskResponse(taskService.findById(id),pageInfo));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<TaskListResponse> getAllTask() {
+    public ResponseEntity<TaskListResponse> getAllTask(PageInfo pageInfo) {
         log.info("Calling method get all task admin");
         return ResponseEntity.status(HttpStatus.OK).body(
-                taskMapper.taskListToTaskListResponse(taskService.findAll()));
+                taskMapper.taskListToTaskListResponse(taskService.findAll(pageInfo)));
     }
 
     @PutMapping("/update/{id}")

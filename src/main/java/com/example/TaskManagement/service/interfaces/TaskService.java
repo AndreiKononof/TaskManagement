@@ -3,6 +3,7 @@ package com.example.TaskManagement.service.interfaces;
 import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import com.example.TaskManagement.model.pagination.PageInfo;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface TaskService {
 
     Task findByUser(Long id, String name);
 
-    List<Task> findAll();
+    List<Task> findAll(PageInfo pageInfo);
 
-    List<Task> findAllByUser(String name);
+    List<Task> findAllByUser(String name, PageInfo pageInfo);
 
     List<Task> findAllBy();
 

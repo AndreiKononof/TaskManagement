@@ -4,12 +4,15 @@ import com.example.TaskManagement.exception.NotFoundException;
 import com.example.TaskManagement.model.Comment;
 import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.User;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.repository.CommentRepository;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -30,12 +33,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> findAll() {
-        List<Comment> comments = commentRepository.findAll();
+    public List<Comment> findAll(PageInfo pageInfo) {
+        if(pageInfo == null){
+            pageInfo = new PageInfo();
+        }
+        List<Comment> comments = commentRepository.findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
         log.info("Completed method findAll comment");
         return comments;
     }
-
     @Override
     public List<Comment> findAllByTask(Task task) {
         List<Comment> comments = commentRepository.findAllByTask(task);
@@ -44,8 +49,29 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<Comment> findAllByTask(Task task, PageInfo pageInfo) {
+        if(pageInfo == null){
+            pageInfo = new PageInfo();
+        }
+        List<Comment> comments = commentRepository.findAllByTask(task, PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
+        log.info("Completed method findAll comment by task ID - {}, name - {}",task.getId(), task.getTitle());
+        return comments;
+    }
+
+    @Override
     public List<Comment> findAllByAuthor(User author) {
         List<Comment> comments = commentRepository.findAllByAuthor(author);
+        log.info("Completed method findAll comment by author name - {}, ID -{}",
+                author.getName(), author.getId());
+        return comments;
+    }
+
+    @Override
+    public List<Comment> findAllByAuthor(User author, PageInfo pageInfo) {
+        if(pageInfo == null){
+            pageInfo = new PageInfo();
+        }
+        List<Comment> comments = commentRepository.findAllByAuthor(author, PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
         log.info("Completed method findAll comment by author name - {}, ID -{}",
                 author.getName(), author.getId());
         return comments;

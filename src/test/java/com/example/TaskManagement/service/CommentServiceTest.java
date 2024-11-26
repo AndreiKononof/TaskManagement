@@ -4,6 +4,7 @@ import com.example.TaskManagement.model.*;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.RoleType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.repository.CommentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -96,7 +97,7 @@ public class CommentServiceTest {
     @DisplayName("Поиск всех комментариев")
     public void testFindAll() {
         when(commentRepository.findAll()).thenReturn(comments);
-        List<Comment> commentList = commentService.findAll();
+        List<Comment> commentList = commentService.findAll(new PageInfo());
         assertEquals(commentList.size(), comments.size());
         verify(commentRepository, times(1)).findAll();
     }

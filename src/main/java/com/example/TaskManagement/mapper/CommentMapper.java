@@ -9,7 +9,6 @@ import com.example.TaskManagement.model.Comment;
 import com.example.TaskManagement.model.User;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -18,10 +17,8 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
 
-
     Comment commentRequestToComment(CommentRequest request);
 
-    @Mapping(source = "id", target = "id")
     Comment commentRequestToComment(Long id, CommentRequest request);
 
     CommentResponse commentToCommentResponse(Comment comment);

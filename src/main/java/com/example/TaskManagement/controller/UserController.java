@@ -10,6 +10,7 @@ import com.example.TaskManagement.mapper.TaskMapper;
 import com.example.TaskManagement.model.Comment;
 import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.TaskService;
 import jakarta.validation.Valid;
@@ -37,16 +38,16 @@ public class UserController {
     private final CommentService commentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id,String name){
+    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id,String name, PageInfo pageInfo){
         log.info("Calling request get task ID - {}", id);
         Task task = taskService.findByUser(id,name);
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskToTaskResponse(task));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<TaskListResponse> getAllTask(String name){
+    public ResponseEntity<TaskListResponse> getAllTask(@RequestBody String name, PageInfo pageInfo){
         log.info("Calling request get all task");
-        List<Task> tasks = taskService.findAllByUser(name);
+        List<Task> tasks = taskService.findAllByUser(name, pageInfo);
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskListToTaskListResponse(tasks));
     }
 

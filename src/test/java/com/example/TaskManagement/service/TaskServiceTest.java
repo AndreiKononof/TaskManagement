@@ -5,6 +5,7 @@ import com.example.TaskManagement.model.*;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.RoleType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.repository.TaskRepository;
 import com.example.TaskManagement.service.interfaces.PriorityService;
 import com.example.TaskManagement.service.interfaces.StatusTaskService;
@@ -115,7 +116,7 @@ public class TaskServiceTest {
         List<Task> tasks = new ArrayList<>();
         tasks.add(task);
         when(taskRepository.findAll()).thenReturn(tasks);
-        List<Task> taskList = service.findAll();
+        List<Task> taskList = service.findAll(new PageInfo());
         verify(taskRepository, times(1)).findAll();
     }
 
@@ -127,12 +128,12 @@ public class TaskServiceTest {
         tasks.add(task);
         when(taskRepository.findAll()).thenReturn(tasks);
         if (name.equals("SomeName2")) {
-            List<Task> tasksDB = service.findAllByUser(name);
+            List<Task> tasksDB = service.findAllByUser(name, new PageInfo());
             assertEquals(1, tasksDB.size());
             verify(taskRepository, times(1)).findAll();
         }
         if (name.equals("SomeName1")) {
-            List<Task> tasksDB = service.findAllByUser(name);
+            List<Task> tasksDB = service.findAllByUser(name, new PageInfo());
             assertEquals(0, tasksDB.size());
             verify(taskRepository,times(1)).findAll();
         }
