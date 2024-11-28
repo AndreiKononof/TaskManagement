@@ -8,13 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @ToString
 @Table(name = "priority", schema = "task_schema")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Priority {
+public class Priority implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

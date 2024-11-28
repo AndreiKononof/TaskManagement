@@ -6,18 +6,19 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Table(name = "users", schema = "task_schema")
 @Data
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +35,14 @@ public class User {
 
     @OneToOne()
     @JoinColumn(name = "role_id")
-    private Role roles;
+    private Role role;
 
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "task_executors",
     joinColumns = @JoinColumn(name = "executor_id",referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Task> tasks;
 
     @CreationTimestamp

@@ -2,6 +2,9 @@ server:
   port: 8085
 
 spring:
+  redis:
+    host: localhost
+    port: 6379
   datasource:
     url: jdbc:postgresql://localhost:5432/task_db
     username: postgres
@@ -12,4 +15,22 @@ spring:
   liquibase:
     change-log: classpath:db.change-log/db.changelog-master.xml
     enabled: true
-    drop-first: false
+    drop-first: true
+
+app:
+  redis:
+    enable: true
+  cache:
+    cache-names:
+      - cacheGetAllTask
+      - cacheGetAllTaskUser
+    caches:
+      cacheGetAllTask:
+        expiry: 10m
+      cacheGetAllTaskUser:
+        expiry: 10m
+
+  jwt:
+    secret: "secretKey"
+    tokenExpiration: 10m
+    refreshTokenExpiration: 120m

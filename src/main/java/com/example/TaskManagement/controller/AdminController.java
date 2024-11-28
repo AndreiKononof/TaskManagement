@@ -22,10 +22,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 @RequiredArgsConstructor
 @Slf4j
 public class AdminController {
@@ -38,6 +39,7 @@ public class AdminController {
 
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TaskResponse> getTask(@PathVariable Long id,PageInfo pageInfo) {
         log.info("Calling request get task admin task ID {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -45,6 +47,7 @@ public class AdminController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TaskListResponse> getAllTask(PageInfo pageInfo) {
         log.info("Calling method get all task admin");
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -52,6 +55,7 @@ public class AdminController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody @Valid TaskRequest taskRequest){
         log.info("Calling method update task ID - {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -64,6 +68,7 @@ public class AdminController {
     }
 
     @PutMapping("/create/comment")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CommentResponse> createComment( @Valid @RequestBody CommentRequest request){
         log.info("Calling request create comment {}",request);
         Comment comment = commentService.save(commentMapper.commentRequestToComment(request));
@@ -71,6 +76,7 @@ public class AdminController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest taskRequest) {
         log.info("Calling request create task");
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -83,6 +89,7 @@ public class AdminController {
     }
 
     @PostMapping("/update_status/{taskId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TaskResponse> updateStatusTask(@PathVariable Long taskId, @Valid StatusUpdateRequest request){
         log.info("Calling request update status task new status - {}", request.getStatusTaskType());
         Task task = taskService.updateStatus(taskId, StatusTaskType.valueOf(request.getStatusTaskType()));
@@ -91,6 +98,7 @@ public class AdminController {
     }
 
     @PostMapping("/update_priority/{taskId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<TaskResponse> updatePriority(@PathVariable Long taskId, @Valid PriorityUpdateRequest request){
         log.info("Calling request update priority task new priority - {}", request.getPriorityType());
         Task task = taskService.updatePriority(taskId, PriorityType.valueOf(request.getPriorityType()));
@@ -99,6 +107,7 @@ public class AdminController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         log.info("Calling request delete task ID - {}",id);
         taskService.delete(id);

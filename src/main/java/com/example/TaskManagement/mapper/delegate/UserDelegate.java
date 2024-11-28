@@ -28,7 +28,7 @@ public abstract class UserDelegate implements UserMapper {
             newRole.setRole(RoleType.valueOf(request.getRole()));
             role = roleService.save(newRole);
         }
-        user.setRoles(role);
+        user.setRole(role);
 
         return user;
     }
@@ -40,7 +40,7 @@ public abstract class UserDelegate implements UserMapper {
 
         response.setName(user.getName());
         response.setEmail(user.getEmail());
-        response.setRole(user.getRoles().toString());
+        response.setRole(user.getRole().toString());
 
         return response;
     }

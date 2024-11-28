@@ -5,18 +5,18 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Data
-@ToString
 @Entity
 @Table(name = "task", schema = "task_schema")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Task {
+public class Task implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +37,7 @@ public class Task {
     private Priority priority;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
+    @ToString.Include
     private List<Comment> comments;
 
     @OneToOne
@@ -47,6 +48,7 @@ public class Task {
     @JoinTable(name = "task_executors",
             joinColumns = @JoinColumn(name = "task_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "executor_id", referencedColumnName = "id"))
+    @ToString.Exclude
     private List<User> executors;
 
     @CreationTimestamp

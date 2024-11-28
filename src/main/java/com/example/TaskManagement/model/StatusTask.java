@@ -7,14 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 
 @Data
+@ToString
 @Entity
 @Table(name = "status", schema = "task_schema")
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatusTask {
+public class StatusTask implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

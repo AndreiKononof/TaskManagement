@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.io.Serializable;
 
 
 @Entity
@@ -15,7 +18,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +27,9 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Column(name = "role_user")
     private RoleType role;
+
+    public SimpleGrantedAuthority toAuthority(){
+        return new SimpleGrantedAuthority(role.name());
+    }
 
 }

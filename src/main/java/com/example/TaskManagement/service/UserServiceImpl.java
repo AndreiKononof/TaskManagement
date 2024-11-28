@@ -8,6 +8,7 @@ import com.example.TaskManagement.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
         throw new NotFoundException(MessageFormat.format("Пользователь {0} не найден", name));
     }
 
+
     @Override
     public User findById(Long id) {
         User user = userRepository.findById(id)
@@ -49,11 +51,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User save(User newUser) {
-        Optional<User> user = userRepository.findByName(newUser.getName());
-        if(user.isPresent()){
-            throw  new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {0}", newUser.getName()));
-        }
+        checkUser(newUser);
         User userSave = userRepository.save(newUser);
         log.info("Save user ID - {}", userSave.getId());
         return userSave;
@@ -71,4 +71,16 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
         log.info("Delete user ID - {}",id);
     }
+
+    public void checkUser(User user){
+        Optional<User> userCheckName = userRepository.findByName(user.getName());
+        if(userCheckName.isPresent()){
+            throw  new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {0}", user.getName()));
+        }
+        Optional<User> userCheckEmail = userRepository.findByEmail(user.getEmail());
+        if(userCheckEmail.isPresent()){
+            throw  new CreateUserException(MessageFormat.format("Пользователь с таким email уже зарегестрирован {0}", user.getName()));
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.TaskManagement.service;
 
+import com.example.TaskManagement.configuration.redis.propertise.AppCacheProperties;
 import com.example.TaskManagement.exception.NotFoundException;
 import com.example.TaskManagement.model.Comment;
 import com.example.TaskManagement.model.Task;
@@ -9,10 +10,11 @@ import com.example.TaskManagement.repository.CommentRepository;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -78,6 +80,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK, allEntries = true, beforeInvocation = true),
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK_USER, allEntries = true, beforeInvocation = true)
+    })
     public Comment save(Comment comment) {
         Comment commentSave = commentRepository.save(comment);
         log.info("Save comment ID - {}",comment.getId());
@@ -85,6 +91,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK, allEntries = true, beforeInvocation = true),
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK_USER, allEntries = true, beforeInvocation = true)
+    })
     public Comment update(Comment comment) {
         Comment commentUpdate = commentRepository.save(comment);
         log.info("Update comment ID {}",commentUpdate.getId());
@@ -92,6 +102,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK, allEntries = true, beforeInvocation = true),
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK_USER, allEntries = true, beforeInvocation = true)
+    })
     public void delete(Long id) {
     commentRepository.deleteById(id);
     log.info("Delete comment ID {}", id);

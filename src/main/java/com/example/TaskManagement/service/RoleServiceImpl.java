@@ -36,6 +36,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByRole(RoleType role) {
         Role roleDB = repository.findByRole(role);
+        if(roleDB == null){
+            roleDB = new Role();
+            roleDB.setRole(role);
+            roleDB = save(roleDB);
+        }
         log.info("Completed method find role {}", role);
         return roleDB;
     }

@@ -9,6 +9,7 @@ import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.repository.TaskRepository;
 import com.example.TaskManagement.service.interfaces.PriorityService;
 import com.example.TaskManagement.service.interfaces.StatusTaskService;
+import com.example.TaskManagement.service.interfaces.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,8 +32,9 @@ public class TaskServiceTest {
     private final TaskRepository taskRepository = Mockito.mock(TaskRepository.class);
     private final StatusTaskService statusTaskService = Mockito.mock(StatusTaskService.class);
     private final PriorityService priorityService = Mockito.mock(PriorityService.class);
+    private final UserService userService = Mockito.mock(UserService.class);
 
-    private final TaskServiceImpl service = new TaskServiceImpl(taskRepository, statusTaskService, priorityService);
+    private final TaskServiceImpl service = new TaskServiceImpl(taskRepository, statusTaskService, priorityService, userService);
 
     private Task task;
 
