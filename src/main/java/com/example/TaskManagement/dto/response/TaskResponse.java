@@ -3,11 +3,17 @@ package com.example.TaskManagement.dto.response;
 import com.example.TaskManagement.dto.response.list.CommentListResponse;
 import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class TaskResponse {
 
     private Long id;
@@ -18,7 +24,7 @@ public class TaskResponse {
 
     private StatusTaskType status;
 
-    private PriorityType priorityType;
+    private PriorityType priority;
 
     private CommentListResponse comments;
 

@@ -89,7 +89,7 @@ public abstract class TaskDelegate implements TaskMapper {
         taskResponse.setTitle(task.getTitle());
         taskResponse.setDescription(task.getDescription());
         taskResponse.setStatus(task.getStatusTask().getStatus());
-        taskResponse.setPriorityType(task.getPriority().getPriorityType());
+        taskResponse.setPriority(task.getPriority().getPriorityType());
         taskResponse.setNameAuthor(task.getAuthor().getName());
 
         taskResponse.setNameExecutor(task.getExecutors()
@@ -115,7 +115,7 @@ public abstract class TaskDelegate implements TaskMapper {
         taskResponse.setTitle(task.getTitle());
         taskResponse.setDescription(task.getDescription());
         taskResponse.setStatus(task.getStatusTask().getStatus());
-        taskResponse.setPriorityType(task.getPriority().getPriorityType());
+        taskResponse.setPriority(task.getPriority().getPriorityType());
         taskResponse.setNameAuthor(task.getAuthor().getName());
         taskResponse.setNameExecutor(task.getExecutors()
                 .stream()

@@ -27,10 +27,10 @@ public class UserServiceTest {
 
     private final UserService service = new UserServiceImpl(repository);
 
-    private  User user;
+    private User user;
 
     @BeforeEach
-    public void createVariable(){
+    public void createVariable() {
         user = User.builder()
                 .id(1L).name("SomeName").password("12345")
                 .createTime(LocalDateTime.now())
@@ -39,16 +39,14 @@ public class UserServiceTest {
                 .tasks(null).build();
     }
 
-
-
     @ParameterizedTest(name = "Пользователь с именем {0}")
     @ValueSource(strings = {"nameOne", "nameTwo"})
     @DisplayName("Поиск по имени")
-    public void testFindByName(String name){
-        if(name.equals("nameOne")){
+    public void testFindByName(String name) {
+        if (name.equals("nameOne")) {
             when(repository.findByName(name)).thenReturn(Optional.ofNullable(user));
             service.findByName(name);
-            verify(repository,times(1)).findByName(name);
+            verify(repository, times(1)).findByName(name);
         } else {
             assertThrows(NotFoundException.class, () -> service.findByName(name));
         }
@@ -56,41 +54,41 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Поиск по ID")
-    public void testFindById(){
+    public void testFindById() {
         when(repository.findById(1L)).thenReturn(Optional.ofNullable(user));
         service.findById(1L);
-        verify(repository,times(1)).findById(1L);
+        verify(repository, times(1)).findById(1L);
     }
 
     @Test
     @DisplayName("Поиск всех пользователей")
-    public void testFindAll(){
+    public void testFindAll() {
         when(repository.findAll()).thenReturn(new ArrayList<>());
         service.findAll();
-        verify(repository,times(1)).findAll();
+        verify(repository, times(1)).findAll();
     }
 
     @Test
     @DisplayName("Сохранение пользователя")
-    public void testSave(){
+    public void testSave() {
         when(repository.save(user)).thenReturn(user);
         service.save(user);
-        verify(repository,times(1)).save(user);
+        verify(repository, times(1)).save(user);
     }
 
     @Test
     @DisplayName("Обновление пользователя")
-    public void testUpdate(){
+    public void testUpdate() {
         when(repository.save(user)).thenReturn(user);
         service.save(user);
-        verify(repository,times(1)).save(user);
+        verify(repository, times(1)).save(user);
     }
 
     @Test
     @DisplayName("Удаление пользователя")
-    public void tetDelete(){
+    public void tetDelete() {
         service.delete(1l);
-        verify(repository,times(1)).deleteById(1L);
+        verify(repository, times(1)).deleteById(1L);
     }
 
 

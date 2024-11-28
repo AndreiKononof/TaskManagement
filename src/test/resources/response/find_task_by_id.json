@@ -1,0 +1,27 @@
+{
+  "task" : {
+    "id" : 1,
+    "title" : "some title",
+    "description" : "some description",
+    "status" : "WAITING",
+    "priority" : "HIGH",
+    "comments" : {
+      "comments" : [
+        {
+          "title" : "Some text 1",
+          "author" : "SomeName",
+          "lastUpdate" : "null"
+        },
+        {
+          "title" : "Some text 2",
+          "author" : "SomeName2",
+          "lastUpdate" : "null"
+        }
+      ]
+    },
+    "nameAuthor" : "SomeName",
+    "nameExecutor": [
+      "SomeName2", "SomeName3"
+    ]
+  }
+}
