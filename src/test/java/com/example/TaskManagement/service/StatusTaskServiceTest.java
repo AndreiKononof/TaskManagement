@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Тест сервиса статуса задач")
@@ -33,12 +33,12 @@ public class StatusTaskServiceTest {
         statusTasks = new ArrayList<>();
         statusTasks.add(0, statusTaskWaiting);
         statusTasks.add(1, statusTaskProcess);
-        statusTasks.add(4, statusTaskExecuted);
+        statusTasks.add(2, statusTaskExecuted);
     }
 
     @Test
-    @DisplayName("Поиск роли по ID")
-    public void testFindByIdRole() {
+    @DisplayName("Поиск статуса по ID")
+    public void testFindById() {
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.ofNullable(statusTasks.get(0)));
         StatusTask statusTask = service.findById(id);
@@ -47,19 +47,17 @@ public class StatusTaskServiceTest {
     }
 
     @Test
-    @DisplayName("Поиск роли по типу")
+    @DisplayName("Поиск статуса по типу")
     public void testFindByStatus() {
         when(repository.findByStatusType(StatusTaskType.WAITING)).thenReturn(statusTasks.get(0));
-
         StatusTask statusTask = service.findByStatus(StatusTaskType.WAITING);
-
         assertEquals(StatusTaskType.WAITING, statusTask.getStatus());
         verify(repository, times(1)).findByStatusType(StatusTaskType.WAITING);
     }
 
     @Test
-    @DisplayName("Сохранение роли")
-    public void testSaveRole() {
+    @DisplayName("Сохранение статуса")
+    public void testSaveStatus() {
         when(repository.save(statusTasks.get(0))).thenReturn(statusTasks.get(0));
         StatusTask statusTask = service.save(statusTasks.get(0));
         assertEquals(statusTasks.get(0).getId(), statusTask.getId());

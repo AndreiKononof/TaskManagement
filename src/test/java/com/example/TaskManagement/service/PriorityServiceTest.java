@@ -23,7 +23,6 @@ public class PriorityServiceTest {
 
     private final PriorityServiceImpl priorityService = new PriorityServiceImpl(priorityRepository);
 
-
     private List<Priority> priorities;
 
     @BeforeEach
@@ -47,8 +46,6 @@ public class PriorityServiceTest {
         Priority priorityDB = priorityService.findById(id);
         assertEquals(priority.getId(), priorityDB.getId());
         verify(priorityRepository, times(1)).findById(id);
-
-
     }
 
     @Test

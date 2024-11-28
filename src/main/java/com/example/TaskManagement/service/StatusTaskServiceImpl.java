@@ -38,6 +38,6 @@ public class StatusTaskServiceImpl implements StatusTaskService {
     public StatusTask save(StatusTask statusTask) {
         StatusTask statusTaskSave = statusTaskRepository.save(statusTask);
         log.info("Completed method save status {}",statusTaskSave.getStatus());
-        return null;
+        return statusTaskSave;
     }
 }

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,19 +43,19 @@ public class CommentServiceTest {
                 .id(1L).name("SomeName").password("12345")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .email("Some@some.some").roles(new Role(1L, RoleType.ADMIN))
+                .email("Some@some.some").role(new Role(1L, RoleType.ADMIN))
                 .tasks(null).build();
         userTwo = User.builder()
                 .id(2L).name("SomeName2").password("12345")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .email("Some2@some.some").roles(new Role(2L, RoleType.USER))
+                .email("Some2@some.some").role(new Role(2L, RoleType.USER))
                 .tasks(null).build();
         userThree = User.builder()
                 .id(3L).name("SomeName3").password("12345")
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .email("Some3@some.some").roles(new Role(2L, RoleType.USER))
+                .email("Some3@some.some").role(new Role(2L, RoleType.USER))
                 .tasks(null).build();
 
         List<User> users = new ArrayList<>();
@@ -92,14 +94,17 @@ public class CommentServiceTest {
 
     }
 
-
     @Test
     @DisplayName("Поиск всех комментариев")
     public void testFindAll() {
-        when(commentRepository.findAll()).thenReturn(comments);
-        List<Comment> commentList = commentService.findAll(new PageInfo());
+        PageInfo pageInfo = new PageInfo();
+
+        when(commentRepository.findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())))
+                .thenReturn(new PageImpl<>(comments));
+        List<Comment> commentList = commentService.findAll(pageInfo);
         assertEquals(commentList.size(), comments.size());
-        verify(commentRepository, times(1)).findAll();
+        verify(commentRepository, times(1))
+                .findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize()));
     }
 
     @Test

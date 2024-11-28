@@ -2,6 +2,7 @@ package com.example.TaskManagement.service;
 
 
 import com.example.TaskManagement.configuration.redis.propertise.AppCacheProperties;
+import com.example.TaskManagement.dto.filter.TaskFilter;
 import com.example.TaskManagement.exception.NotFoundException;
 import com.example.TaskManagement.exception.ValidTaskException;
 import com.example.TaskManagement.model.Priority;
@@ -12,6 +13,7 @@ import com.example.TaskManagement.model.enums.PriorityType;
 import com.example.TaskManagement.model.enums.StatusTaskType;
 import com.example.TaskManagement.model.pagination.PageInfo;
 import com.example.TaskManagement.repository.TaskRepository;
+import com.example.TaskManagement.repository.specification.TaskSpecification;
 import com.example.TaskManagement.service.interfaces.PriorityService;
 import com.example.TaskManagement.service.interfaces.StatusTaskService;
 import com.example.TaskManagement.service.interfaces.TaskService;
@@ -22,6 +24,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,13 +54,12 @@ public class TaskServiceImpl implements TaskService {
         return task;
     }
 
-
     @Override
     public Task findByUser(Long id, String name) {
         Task task = findById(id);
 
-        if(task.getExecutors().stream().map(User::getName).toList().contains(name)){
-            log.info("Completed method find task user {}",name);
+        if (task.getExecutors().stream().map(User::getName).toList().contains(name)) {
+            log.info("Completed method find task user {}", name);
             return task;
         }
 
@@ -67,10 +69,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Cacheable(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK)
     public List<Task> findAll(PageInfo pageInfo) {
-        if(pageInfo == null){
+        if (pageInfo == null) {
             pageInfo = new PageInfo();
         }
-        List<Task> tasks = taskRepository.findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
+
+        List<Task> tasks = taskRepository.findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).toList();
         log.info("Completed method findAll task");
         return tasks;
     }
@@ -78,25 +81,27 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Cacheable(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK_USER)
     public List<Task> findAllByUser(String name, PageInfo pageInfo) {
-        if(pageInfo == null){
+        if (pageInfo == null) {
             pageInfo = new PageInfo();
         }
         List<Task> tasksAll = taskRepository.findAll();
         User user = userService.findByName(name);
         List<Task> tasks = new ArrayList<>();
-        for(Task task : tasksAll){
-            if(task.getExecutors().stream()
-                    .map(User::getId).toList().contains(user.getId())){
+        for (Task task : tasksAll) {
+            if (task.getExecutors().stream()
+                    .map(User::getId).toList().contains(user.getId())) {
                 tasks.add(task);
             }
         }
-        log.info("Completed method find task for user {}",name);
+        log.info("Completed method find task for user {}", name);
         return tasks;
     }
 
     @Override
-    public List<Task> findAllBy() {
-        return List.of();
+    public List<Task> findAllBy(TaskFilter taskFilter) {
+        List<Task> tasks = taskRepository.findAll(TaskSpecification.withFilter(taskFilter));
+        log.info("Completed method findAll task with filter author {} executor {}", taskFilter.getAuthorId(), taskFilter.getExecutorId());
+        return tasks;
     }
 
     @Override
@@ -106,7 +111,7 @@ public class TaskServiceImpl implements TaskService {
     })
     public Task save(Task task) {
         Task taskSave = taskRepository.save(task);
-        log.info("Save task ID - {}",task.getId());
+        log.info("Save task ID - {}", task.getId());
         return taskSave;
     }
 
@@ -117,7 +122,7 @@ public class TaskServiceImpl implements TaskService {
     })
     public Task update(Task task) {
         Task taskUpdate = taskRepository.save(task);
-        log.info("Update task ID - {}",task.getId());
+        log.info("Update task ID - {}", task.getId());
         return taskUpdate;
     }
 
@@ -130,10 +135,10 @@ public class TaskServiceImpl implements TaskService {
     public Task updateStatus(Long id, StatusTaskType statusTaskType) {
         Task task = findById(id);
         StatusTask statusTask = statusTaskService.findByStatus(statusTaskType);
-        if(statusTask == null){
-            statusTask =new StatusTask();
+        if (statusTask == null) {
+            statusTask = new StatusTask();
             statusTask.setStatus(statusTaskType);
-            statusTaskService.save(statusTask);
+            statusTask = statusTaskService.save(statusTask);
         }
         task.setStatusTask(statusTask);
         save(task);
@@ -150,7 +155,7 @@ public class TaskServiceImpl implements TaskService {
     public Task updatePriority(Long id, PriorityType priorityType) {
         Task task = findById(id);
         Priority priority = priorityService.findByPriority(priorityType);
-        if(priority == null){
+        if (priority == null) {
             priority = new Priority();
             priority.setPriorityType(priorityType);
             priorityService.save(priority);
@@ -162,12 +167,28 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK, allEntries = true, beforeInvocation = true),
+            @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK_USER, allEntries = true, beforeInvocation = true)
+    })
+    public Task addExecutor(Long id, String name) {
+        Task task = findById(id);
+        List<User> executors = task.getExecutors();
+        User newExecutor = userService.findByName(name);
+        executors.add(newExecutor);
+        task.setExecutors(executors);
+        save(task);
+        return task;
+    }
+
+    @Override
     @Caching(evict = {
             @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK, allEntries = true, beforeInvocation = true),
             @CacheEvict(cacheNames = AppCacheProperties.CacheNames.CACHE_GET_ALL_TASK_USER, allEntries = true, beforeInvocation = true)
     })
     public void delete(Long id) {
-    taskRepository.deleteById(id);
-    log.info("Delete task ID - {}",id);
+        taskRepository.deleteById(id);
+        log.info("Delete task ID - {}", id);
     }
 }

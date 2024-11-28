@@ -12,15 +12,19 @@ import com.example.TaskManagement.model.Comment;
 import com.example.TaskManagement.model.Task;
 import com.example.TaskManagement.model.enums.StatusTaskType;
 import com.example.TaskManagement.model.pagination.PageInfo;
-import com.example.TaskManagement.security.SecurityService;
 import com.example.TaskManagement.service.interfaces.CommentService;
 import com.example.TaskManagement.service.interfaces.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +33,7 @@ import java.util.List;
 @RequestMapping("/api/user")
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "Интерфейс пользователя v.1",description = "Интерфейс позволяющий пользователю с ролью USER совершать операции")
 public class UserController {
 
 
@@ -40,41 +45,52 @@ public class UserController {
 
     private final CommentService commentService;
 
-    private final SecurityService securityService;
-
+    @Operation(summary = "Получение задачи по ID",
+            description = "Позволяет получать задачу пользователю по ID при условии, что пользователь являеться исполнителем задачи. Поля ввода валидируются."
+    )
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id,String name, PageInfo pageInfo){
+    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         log.info("Calling request get task ID - {}", id);
-        Task task = taskService.findByUser(id,name);
+        Task task = taskService.findByUser(id, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskToTaskResponse(task));
     }
 
+    @Operation(
+            summary = "Получение всех задач пользователя",
+            description = "Позволят получить список всех задач пользователя. Предусмотрена пагинациия предоставляемого списка. Поля ввода валидируются."
+    )
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<TaskListResponse> getAllTask(@RequestBody ExecutorNameRequest request, PageInfo pageInfo){
+    public ResponseEntity<TaskListResponse> getAllTask(@AuthenticationPrincipal UserDetails userDetails, PageInfo pageInfo) {
         log.info("Calling request get all task");
-        List<Task> tasks = taskService.findAllByUser(request.getName(), pageInfo);
+        List<Task> tasks = taskService.findAllByUser(userDetails.getUsername(), pageInfo);
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskListToTaskListResponse(tasks));
     }
 
-    @PutMapping("/create/comment/{id}")
+    @Operation(
+            summary = "Создание комментария к задаче",
+            description = "Позволяет создать и добавить коментарий к выполняемой задачи. Поля ввода валидируются."
+    )
+    @PostMapping("/create/comment")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<CommentResponse> createComment(@PathVariable Long id,@RequestBody @Valid CommentRequest request){
-        log.info("Calling request create comment {}",request);
+    public ResponseEntity<CommentResponse> createComment(@RequestBody @Valid CommentRequest request) {
+        log.info("Calling request create comment {}", request);
         Comment comment = commentService.save(commentMapper.commentRequestToComment(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(commentMapper.commentToCommentResponse(comment));
     }
 
-    @PostMapping("/update_status/{taskId}")
+    @Operation(
+            summary = "Обновление статуса задачи",
+            description = "Обновляет статус задачи указанный пользователем. Список возможных статусов ограничен и валидируется"
+    )
+    @PutMapping("/update_status/{taskId}")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public ResponseEntity<TaskResponse> updateStatusTask(@PathVariable Long taskId, @RequestBody @Valid StatusUpdateRequest status){
+    public ResponseEntity<TaskResponse> updateStatusTask(@PathVariable Long taskId, @RequestBody @Valid StatusUpdateRequest status) {
         log.info("Calling request update status task new status - {}", status.getStatusTaskType());
         Task task = taskService.updateStatus(taskId, StatusTaskType.valueOf(status.getStatusTaskType()));
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskToTaskResponse(task));
-
     }
-
 
 
 }

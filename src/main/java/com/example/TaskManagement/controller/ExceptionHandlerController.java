@@ -1,6 +1,5 @@
 package com.example.TaskManagement.controller;
 
-
 import com.example.TaskManagement.exception.*;
 import com.example.TaskManagement.dto.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,6 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
     }
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> validException(MethodArgumentNotValidException ex) {
         log.error("Error in the valid value of the entity field");
@@ -54,13 +52,13 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler(RefreshTokenException.class)
-    public ResponseEntity<ErrorResponse> refreshTokenException(RefreshTokenException e){
+    public ResponseEntity<ErrorResponse> refreshTokenException(RefreshTokenException e) {
         log.error("Refresh token exception: {}", e);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
     }
 
     @ExceptionHandler(UserNotAllowedCorrectException.class)
-    public ResponseEntity<ErrorResponse> refreshTokenException(UserNotAllowedCorrectException e){
+    public ResponseEntity<ErrorResponse> refreshTokenException(UserNotAllowedCorrectException e) {
         log.error("Error accessing changes: {}", e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
     }

@@ -24,22 +24,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByName(String name) {
-        log.info("Calling method findByName user {}",name);
+        log.info("Calling method findByName user {}", name);
         Optional<User> user = userRepository.findByName(name);
-        if(user.isPresent()){
-            log.info("Completed method findByName user name - {}", name );
+        if (user.isPresent()) {
+            log.info("Completed method findByName user name - {}", name);
             return user.get();
         }
         throw new NotFoundException(MessageFormat.format("Пользователь {0} не найден", name));
     }
-
 
     @Override
     public User findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(()
                         -> new NotFoundException(MessageFormat.format("Пользователь с ID - {0} не найден", id)));
-        log.info("Completed method findById user ID - {}",id);
+        log.info("Completed method findById user ID - {}", id);
         return user;
     }
 
@@ -62,24 +61,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(User user) {
         User userUpdate = userRepository.save(user);
-        log.info("Update user ID - {}",userUpdate.getId());
+        log.info("Update user ID - {}", userUpdate.getId());
         return userUpdate;
     }
 
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
-        log.info("Delete user ID - {}",id);
+        log.info("Delete user ID - {}", id);
     }
 
-    public void checkUser(User user){
+    public void checkUser(User user) {
         Optional<User> userCheckName = userRepository.findByName(user.getName());
-        if(userCheckName.isPresent()){
-            throw  new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {0}", user.getName()));
+        if (userCheckName.isPresent()) {
+            throw new CreateUserException(MessageFormat.format("Пользователь с таким именем уже зарегестрирован {0}", user.getName()));
         }
         Optional<User> userCheckEmail = userRepository.findByEmail(user.getEmail());
-        if(userCheckEmail.isPresent()){
-            throw  new CreateUserException(MessageFormat.format("Пользователь с таким email уже зарегестрирован {0}", user.getName()));
+        if (userCheckEmail.isPresent()) {
+            throw new CreateUserException(MessageFormat.format("Пользователь с таким email уже зарегестрирован {0}", user.getName()));
         }
     }
 

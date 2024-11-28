@@ -38,6 +38,7 @@ dependencies {
 	implementation("redis.clients:jedis")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("javax.xml.bind:jaxb-api:2.3.1")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
 
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
 	annotationProcessor("org.projectlombok:lombok")

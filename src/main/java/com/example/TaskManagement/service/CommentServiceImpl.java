@@ -39,7 +39,8 @@ public class CommentServiceImpl implements CommentService {
         if(pageInfo == null){
             pageInfo = new PageInfo();
         }
-        List<Comment> comments = commentRepository.findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
+        List<Comment> comments = commentRepository
+                .findAll(PageRequest.of(pageInfo.getNumber(), pageInfo.getSize())).getContent();
         log.info("Completed method findAll comment");
         return comments;
     }

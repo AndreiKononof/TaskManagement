@@ -37,7 +37,7 @@ public class Task implements Serializable {
     private Priority priority;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
-    @ToString.Include
+    @ToString.Exclude
     private List<Comment> comments;
 
     @OneToOne
