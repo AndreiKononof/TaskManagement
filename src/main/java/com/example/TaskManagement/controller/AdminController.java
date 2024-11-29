@@ -151,7 +151,7 @@ public class AdminController {
     )
     @PutMapping("/add_executor")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<TaskResponse> updateExecutors(@PathVariable Long taskId, @Valid ExecutorNameRequest request) {
+    public ResponseEntity<TaskResponse> addExecutors(@PathVariable Long taskId, @Valid ExecutorNameRequest request) {
         log.info("Calling request update executors task new executor - {}", request.getName());
         Task task = taskService.addExecutor(taskId, request.getName());
         return ResponseEntity.status(HttpStatus.OK).body(taskMapper.taskToTaskResponse(task));
